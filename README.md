@@ -1,6 +1,7 @@
 # job4j_cars
 
----
+[![build](https://github.com/SergeyPoletaev/job4j_cars/workflows/build/badge.svg)](https://github.com/SergeyPoletaev/job4j_cars/actions)
+
 ### Описание проекта:
 
 Это приложение - сервис по продаже автомобилей. 
