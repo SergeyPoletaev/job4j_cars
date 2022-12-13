@@ -13,6 +13,7 @@ public class UserRepository {
     private static final String FROM_AUTO_USER_ORDER_BY_ID = "from auto_user order by id";
     private static final String FROM_AUTO_USER_WHERE_LOGIN_LIKE = "from auto_user where login like :key";
     private static final String FROM_AUTO_USER_WHERE_LOGIN = "from auto_user where login= :login";
+    private static final String FROM_AUTO_USER_WHERE_ID = "from auto_user where id= :id";
     private final SessionFactory sf;
 
     /**
@@ -89,7 +90,9 @@ public class UserRepository {
      */
     public Optional<User> findById(int id) {
         Session session = sf.openSession();
-        Optional<User> rsl = Optional.ofNullable(session.find(User.class, id));
+        Optional<User> rsl = session.createQuery(FROM_AUTO_USER_WHERE_ID, User.class)
+                .setParameter("id", id)
+                .uniqueResultOptional();
         session.close();
         return rsl;
     }
