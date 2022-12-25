@@ -7,17 +7,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
 @Setter
-@Entity(name = "auto_user")
-public class User {
+@Entity(name = "price_history")
+public class PriceHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String login;
-    private String password;
+    private BigInteger before;
+    private BigInteger after;
+    private LocalDateTime created;
 
     @Override
     public boolean equals(Object o) {
@@ -27,8 +30,8 @@ public class User {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        User user = (User) o;
-        return id == user.id;
+        PriceHistory that = (PriceHistory) o;
+        return id == that.id;
     }
 
     @Override
