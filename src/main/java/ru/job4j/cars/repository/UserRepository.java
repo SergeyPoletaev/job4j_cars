@@ -1,6 +1,7 @@
 package ru.job4j.cars.repository;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.User;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @AllArgsConstructor
+@Repository
 public class UserRepository {
     private static final String FROM_AUTO_USER_ORDER_BY_ID = "from auto_user order by id";
     private static final String FROM_AUTO_USER_WHERE_LOGIN_LIKE = "from auto_user where login like :key";
