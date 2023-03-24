@@ -34,6 +34,7 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;
+    private byte[] photo;
 
     @Override
     public boolean equals(Object o) {
