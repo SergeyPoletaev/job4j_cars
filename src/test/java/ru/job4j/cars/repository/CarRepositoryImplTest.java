@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class CarRepositoryTest {
+class CarRepositoryImplTest {
     private static SessionFactory sf;
 
     @BeforeAll
@@ -48,7 +48,7 @@ class CarRepositoryTest {
 
     @Test
     void whenCreateCarThenFindThisCar() {
-        CarRepository carRepository = new CarRepository(new CrudRepositoryImpl(sf));
+        CarRepository carRepository = new CarRepositoryImpl(new CrudRepositoryImpl(sf));
         Car car = getCar();
         carRepository.create(car);
         assertThat(carRepository.findById(car.getId()).orElseThrow().getName())
@@ -57,7 +57,7 @@ class CarRepositoryTest {
 
     @Test
     void whenUpdateCarThenFindUpdatedCar() {
-        CarRepository carRepository = new CarRepository(new CrudRepositoryImpl(sf));
+        CarRepository carRepository = new CarRepositoryImpl(new CrudRepositoryImpl(sf));
         Car car = getCar();
         carRepository.create(car);
         car.setName("testCar2");
@@ -68,7 +68,7 @@ class CarRepositoryTest {
 
     @Test
     void whenDeleteThenThisCarNotFound() {
-        CarRepository carRepository = new CarRepository(new CrudRepositoryImpl(sf));
+        CarRepository carRepository = new CarRepositoryImpl(new CrudRepositoryImpl(sf));
         Car car = getCar();
         carRepository.create(car);
         carRepository.delete(car.getId());
@@ -77,7 +77,7 @@ class CarRepositoryTest {
 
     @Test
     void whenFindAllThenFindAllCars() {
-        CarRepository carRepository = new CarRepository(new CrudRepositoryImpl(sf));
+        CarRepository carRepository = new CarRepositoryImpl(new CrudRepositoryImpl(sf));
         Car car1 = getCar();
         Car car2 = getCar();
         carRepository.create(car1);
@@ -89,11 +89,11 @@ class CarRepositoryTest {
         Engine engine = new Engine();
         engine.setName("xwq");
         engine.setNumber(123);
-        EngineRepository engineRepository = new EngineRepository(new CrudRepositoryImpl(sf));
+        EngineRepository engineRepository = new EngineRepositoryImpl(new CrudRepositoryImpl(sf));
         engineRepository.create(engine);
         Driver driver = new Driver();
         driver.setName("anna");
-        DriverRepository driverRepository = new DriverRepository(new CrudRepositoryImpl(sf));
+        DriverRepository driverRepository = new DriverRepositoryImpl(new CrudRepositoryImpl(sf));
         driverRepository.create(driver);
         Car car = new Car();
         car.setName("testCar");

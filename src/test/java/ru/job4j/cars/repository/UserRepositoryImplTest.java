@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserRepositoryTest {
+class UserRepositoryImplTest {
     private static SessionFactory sf;
 
     @BeforeAll
@@ -45,7 +45,7 @@ class UserRepositoryTest {
 
     @Test
     void whenCreateSomeUserThenFindThisUser() {
-        UserRepository userRepository = new UserRepository(new CrudRepositoryImpl(sf));
+        UserRepository userRepository = new UserRepositoryImpl(new CrudRepositoryImpl(sf));
         User user = new User();
         user.setLogin("testUser");
         user.setPassword("123");
@@ -56,7 +56,7 @@ class UserRepositoryTest {
 
     @Test
     void whenUpdateUserThenFindUpdatedUser() {
-        UserRepository userRepository = new UserRepository(new CrudRepositoryImpl(sf));
+        UserRepository userRepository = new UserRepositoryImpl(new CrudRepositoryImpl(sf));
         User user = new User();
         user.setLogin("testUser");
         user.setPassword("123");
@@ -69,7 +69,7 @@ class UserRepositoryTest {
 
     @Test
     void whenDeleteUserThenThisUserNotFound() {
-        UserRepository userRepository = new UserRepository(new CrudRepositoryImpl(sf));
+        UserRepository userRepository = new UserRepositoryImpl(new CrudRepositoryImpl(sf));
         User user = new User();
         user.setLogin("testUser");
         user.setPassword("123");
@@ -80,7 +80,7 @@ class UserRepositoryTest {
 
     @Test
     void whenFindAllOrderByIdThenFindOrdered() {
-        UserRepository userRepository = new UserRepository(new CrudRepositoryImpl(sf));
+        UserRepository userRepository = new UserRepositoryImpl(new CrudRepositoryImpl(sf));
         User user1 = new User();
         user1.setLogin("user1");
         user1.setPassword("123");
@@ -103,7 +103,7 @@ class UserRepositoryTest {
 
     @Test
     void whenFindByLikeLoginThenFindToThePattern() {
-        UserRepository userRepository = new UserRepository(new CrudRepositoryImpl(sf));
+        UserRepository userRepository = new UserRepositoryImpl(new CrudRepositoryImpl(sf));
         User user1 = new User();
         user1.setLogin("testUser");
         user1.setPassword("123");
@@ -119,7 +119,7 @@ class UserRepositoryTest {
 
     @Test
     void whenFindByLoginThenFindUserWithThisLogin() {
-        UserRepository userRepository = new UserRepository(new CrudRepositoryImpl(sf));
+        UserRepository userRepository = new UserRepositoryImpl(new CrudRepositoryImpl(sf));
         User user1 = new User();
         user1.setLogin("testUser");
         user1.setPassword("123");

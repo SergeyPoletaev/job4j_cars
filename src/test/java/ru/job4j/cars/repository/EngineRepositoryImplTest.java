@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class EngineRepositoryTest {
+class EngineRepositoryImplTest {
     private static SessionFactory sf;
 
     @BeforeAll
@@ -47,7 +47,7 @@ class EngineRepositoryTest {
         Engine engine = new Engine();
         engine.setName("test");
         engine.setNumber(123);
-        EngineRepository engineRepository = new EngineRepository(new CrudRepositoryImpl(sf));
+        EngineRepository engineRepository = new EngineRepositoryImpl(new CrudRepositoryImpl(sf));
         engineRepository.create(engine);
         assertThat(engineRepository.findById(engine.getId()).orElseThrow().getName()).isEqualTo("test");
     }
@@ -57,7 +57,7 @@ class EngineRepositoryTest {
         Engine engine = new Engine();
         engine.setName("test");
         engine.setNumber(123);
-        EngineRepository engineRepository = new EngineRepository(new CrudRepositoryImpl(sf));
+        EngineRepository engineRepository = new EngineRepositoryImpl(new CrudRepositoryImpl(sf));
         engineRepository.create(engine);
         engine.setName("test2");
         engineRepository.update(engine);
@@ -69,7 +69,7 @@ class EngineRepositoryTest {
         Engine engine = new Engine();
         engine.setName("test");
         engine.setNumber(123);
-        EngineRepository engineRepository = new EngineRepository(new CrudRepositoryImpl(sf));
+        EngineRepository engineRepository = new EngineRepositoryImpl(new CrudRepositoryImpl(sf));
         engineRepository.create(engine);
         engineRepository.delete(engine.getId());
         assertThat(engineRepository.findById(engine.getId())).isEmpty();
@@ -83,7 +83,7 @@ class EngineRepositoryTest {
         Engine engine2 = new Engine();
         engine2.setName("test2");
         engine2.setNumber(456);
-        EngineRepository engineRepository = new EngineRepository(new CrudRepositoryImpl(sf));
+        EngineRepository engineRepository = new EngineRepositoryImpl(new CrudRepositoryImpl(sf));
         engineRepository.create(engine1);
         engineRepository.create(engine2);
         assertThat(engineRepository.findAll()).isEqualTo(List.of(engine1, engine2));
