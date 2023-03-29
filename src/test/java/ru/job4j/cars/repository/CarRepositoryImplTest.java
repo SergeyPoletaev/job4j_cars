@@ -34,9 +34,9 @@ class CarRepositoryImplTest {
         Transaction tx = null;
         try (Session session = sf.openSession()) {
             tx = session.beginTransaction();
-            session.createQuery("delete from car").executeUpdate();
-            session.createQuery("delete from engine").executeUpdate();
-            session.createQuery("delete from driver").executeUpdate();
+            session.createQuery("delete from Car").executeUpdate();
+            session.createQuery("delete from Engine").executeUpdate();
+            session.createQuery("delete from Driver").executeUpdate();
             tx.commit();
         } catch (Exception ex) {
             if (tx != null) {

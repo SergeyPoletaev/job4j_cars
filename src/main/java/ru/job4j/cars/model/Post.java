@@ -11,7 +11,8 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@Entity(name = "auto_post")
+@Entity
+@Table(name = "auto_post")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

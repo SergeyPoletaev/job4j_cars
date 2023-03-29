@@ -11,8 +11,8 @@ import java.util.Optional;
 @AllArgsConstructor
 @Repository
 public class CarRepositoryImpl implements CarRepository {
-    private static final String FROM_CAR_WHERE_ID = "from car where id= :id";
-    private static final String FROM_CAR = "from car";
+    private static final String FROM_CAR_WHERE_ID = "from Car where id= :id";
+    private static final String FROM_CAR = "from Car";
     private CrudRepository crudRepository;
 
     @Override

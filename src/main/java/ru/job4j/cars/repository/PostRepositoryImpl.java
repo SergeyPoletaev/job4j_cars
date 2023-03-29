@@ -12,11 +12,11 @@ import java.util.Optional;
 @AllArgsConstructor
 @Repository
 public class PostRepositoryImpl implements PostRepository {
-    private static final String FROM_POST_WHERE_ID = "from auto_post where id= :id";
-    private static final String FROM_POST = "from auto_post";
-    private static final String FROM_POST_WHERE_CREATED_CURRENT_DATE = "from auto_post where created >= :localDateTime";
-    private static final String FROM_POST_WHERE_CAR_NAME = "from auto_post where car = (from car where name= :model)";
-    private static final String FROM_POST_WITH_PHOTO = "from auto_post where photo is not null";
+    private static final String FROM_POST_WHERE_ID = "from Post where id= :id";
+    private static final String FROM_POST = "from Post";
+    private static final String FROM_POST_WHERE_CREATED_CURRENT_DATE = "from Post where created >= :localDateTime";
+    private static final String FROM_POST_WHERE_CAR_NAME = "from Post where car = (from Car where name= :model)";
+    private static final String FROM_POST_WITH_PHOTO = "from Post where photo is not null";
     private CrudRepository crudRepository;
 
     @Override

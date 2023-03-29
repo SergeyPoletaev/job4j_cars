@@ -3,16 +3,14 @@ package ru.job4j.cars.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
 @Setter
-@Entity(name = "history_owners")
+@Entity
+@Table(name = "history_owners")
 public class HistoryOwners {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

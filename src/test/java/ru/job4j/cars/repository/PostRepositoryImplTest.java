@@ -35,11 +35,11 @@ class PostRepositoryImplTest {
         Transaction tx = null;
         try (Session session = sf.openSession()) {
             tx = session.beginTransaction();
-            session.createQuery("delete from auto_post").executeUpdate();
-            session.createQuery("delete from auto_user").executeUpdate();
-            session.createQuery("delete from car").executeUpdate();
-            session.createQuery("delete from engine").executeUpdate();
-            session.createQuery("delete from driver").executeUpdate();
+            session.createQuery("delete from Post").executeUpdate();
+            session.createQuery("delete from User").executeUpdate();
+            session.createQuery("delete from Car").executeUpdate();
+            session.createQuery("delete from Engine").executeUpdate();
+            session.createQuery("delete from Driver").executeUpdate();
             tx.commit();
         } catch (Exception ex) {
             if (tx != null) {

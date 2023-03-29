@@ -33,7 +33,7 @@ class UserRepositoryImplTest {
         Transaction tx = null;
         try (Session session = sf.openSession()) {
             tx = session.beginTransaction();
-            session.createQuery("delete from auto_user").executeUpdate();
+            session.createQuery("delete from User").executeUpdate();
             tx.commit();
         } catch (Exception ex) {
             if (tx != null) {

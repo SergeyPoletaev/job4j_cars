@@ -11,8 +11,8 @@ import java.util.Optional;
 @AllArgsConstructor
 @Repository
 public class EngineRepositoryImpl implements EngineRepository {
-    private static final String FROM_ENGINE_WHERE_ID = "from engine where id= :id";
-    private static final String FROM_ENGINE = "from engine";
+    private static final String FROM_ENGINE_WHERE_ID = "from Engine where id= :id";
+    private static final String FROM_ENGINE = "from Engine";
     private CrudRepository crudRepository;
 
     @Override

@@ -3,17 +3,15 @@ package ru.job4j.cars.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
 @Setter
-@Entity(name = "price_history")
+@Entity
+@Table(name = "price_history")
 public class PriceHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,15 +3,13 @@ package ru.job4j.cars.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Getter
 @Setter
-@Entity(name = "driver")
+@Entity
+@Table(name = "driver")
 public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

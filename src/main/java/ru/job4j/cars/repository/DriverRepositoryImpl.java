@@ -11,8 +11,8 @@ import java.util.Optional;
 @AllArgsConstructor
 @Repository
 public class DriverRepositoryImpl implements DriverRepository {
-    private static final String FROM_DRIVER_WHERE_ID = "from driver where id= :id";
-    private static final String FROM_DRIVER = "from driver";
+    private static final String FROM_DRIVER_WHERE_ID = "from Driver where id= :id";
+    private static final String FROM_DRIVER = "from Driver";
     private CrudRepository crudRepository;
 
     @Override

@@ -11,10 +11,10 @@ import java.util.Optional;
 @AllArgsConstructor
 @Repository
 public class UserRepositoryImpl implements UserRepository {
-    private static final String FROM_AUTO_USER_ORDER_BY_ID = "from auto_user order by id";
-    private static final String FROM_AUTO_USER_WHERE_LOGIN_LIKE = "from auto_user where login like :key";
-    private static final String FROM_AUTO_USER_WHERE_LOGIN = "from auto_user where login= :login";
-    private static final String FROM_AUTO_USER_WHERE_ID = "from auto_user where id= :id";
+    private static final String FROM_AUTO_USER_ORDER_BY_ID = "from User order by id";
+    private static final String FROM_AUTO_USER_WHERE_LOGIN_LIKE = "from User where login like :key";
+    private static final String FROM_AUTO_USER_WHERE_LOGIN = "from User where login= :login";
+    private static final String FROM_AUTO_USER_WHERE_ID = "from User where id= :id";
     private final CrudRepository crudRepository;
 
     /**

@@ -32,7 +32,7 @@ class EngineRepositoryImplTest {
         Transaction tx = null;
         try (Session session = sf.openSession()) {
             tx = session.beginTransaction();
-            session.createQuery("delete from engine").executeUpdate();
+            session.createQuery("delete from Engine").executeUpdate();
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
