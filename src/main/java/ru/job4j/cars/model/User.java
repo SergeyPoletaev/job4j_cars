@@ -16,6 +16,10 @@ public class User {
     private int id;
     private String login;
     private String password;
+    @Column(name = "user_name")
+    private String name;
+    @Column(name = "user_zone")
+    private String timezone;
 
     @Override
     public boolean equals(Object o) {
