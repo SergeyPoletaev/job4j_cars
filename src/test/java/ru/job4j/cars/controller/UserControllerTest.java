@@ -21,7 +21,7 @@ class UserControllerTest {
     void whenGetLoginFormWithFailFalse() {
         Model model = mock(Model.class);
         UserController userController = new UserController(mock(UserService.class));
-        String page = userController.getLoginForm(model, false);
+        String page = userController.loginForm(model, false);
         verify(model).addAttribute("fail", true);
         assertThat(page).isEqualTo("/user/login");
     }
@@ -30,7 +30,7 @@ class UserControllerTest {
     void whenGetLoginFormWithFailTrue() {
         Model model = mock(Model.class);
         UserController userController = new UserController(mock(UserService.class));
-        String page = userController.getLoginForm(model, true);
+        String page = userController.loginForm(model, true);
         verify(model).addAttribute("fail", true);
         assertThat(page).isEqualTo("/user/login");
     }
@@ -39,7 +39,7 @@ class UserControllerTest {
     void whenGetLoginFormWithFailNull() {
         Model model = mock(Model.class);
         UserController userController = new UserController(mock(UserService.class));
-        String page = userController.getLoginForm(model, null);
+        String page = userController.loginForm(model, null);
         verify(model).addAttribute("fail", false);
         assertThat(page).isEqualTo("/user/login");
     }
@@ -76,7 +76,7 @@ class UserControllerTest {
         UserService userService = mock(UserService.class);
         UserController userController = new UserController(userService);
         Model model = mock(Model.class);
-        String page = userController.getRegistrationForm(model);
+        String page = userController.add(model);
         List<TimeZone> zones = Arrays.stream(TimeZone.getAvailableIDs())
                 .map(TimeZone::getTimeZone)
                 .toList();

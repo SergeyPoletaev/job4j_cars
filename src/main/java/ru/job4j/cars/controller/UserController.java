@@ -21,7 +21,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/login")
-    public String getLoginForm(Model model, @RequestParam(name = "fail", required = false) Boolean fail) {
+    public String loginForm(Model model, @RequestParam(name = "fail", required = false) Boolean fail) {
         model.addAttribute("fail", fail != null);
         return "/user/login";
     }
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping("/add")
-    public String getRegistrationForm(Model model) {
+    public String add(Model model) {
         List<TimeZone> zones = Arrays.stream(TimeZone.getAvailableIDs())
                 .map(TimeZone::getTimeZone)
                 .toList();
