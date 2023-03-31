@@ -36,6 +36,7 @@ public class Post {
     @JoinColumn(name = "car_id")
     private Car car;
     private byte[] photo;
+    private boolean status;
 
     @Override
     public boolean equals(Object o) {
