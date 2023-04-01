@@ -48,7 +48,7 @@ public class UserController {
 
     @PostMapping("/registration")
     public String registration(@ModelAttribute User user, RedirectAttributes redirectAttributes, Model model) {
-        model.addAttribute("message",
+        model.addAttribute("error_message",
                 "При регистрации пользователя возникла ошибка, пользователь не зарегистрирован");
         if (userService.findByLogin(user.getLogin()).isEmpty()) {
             return userService.create(user).getId() != 0 ? "redirect:/user/login" : "/shared/fail";

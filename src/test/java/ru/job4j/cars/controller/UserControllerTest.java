@@ -109,7 +109,7 @@ class UserControllerTest {
         RedirectAttributes attr = mock(RedirectAttributes.class);
         Model model = mock(Model.class);
         String page = userController.registration(user, attr, model);
-        verify(model).addAttribute("message",
+        verify(model).addAttribute("error_message",
                 "При регистрации пользователя возникла ошибка, пользователь не зарегистрирован");
         assertThat(page).isEqualTo("/shared/fail");
     }
