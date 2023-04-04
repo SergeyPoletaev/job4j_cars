@@ -10,12 +10,16 @@ import javax.servlet.http.HttpSession;
 public class HttpHelper {
 
     public void addUserToModel(Model model, HttpSession httpSession) {
+        model.addAttribute("user", getCurrentUser(httpSession));
+    }
+
+    public User getCurrentUser(HttpSession httpSession) {
         User user = (User) httpSession.getAttribute("user");
         if (user == null) {
             user = new User();
             user.setName("Гость");
             httpSession.setAttribute("user", user);
         }
-        model.addAttribute("user", user);
+        return user;
     }
 }
