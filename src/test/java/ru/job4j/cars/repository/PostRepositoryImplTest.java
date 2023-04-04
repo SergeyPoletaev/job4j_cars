@@ -172,6 +172,27 @@ class PostRepositoryImplTest {
         assertThat(postRepository.findPostsWithPhoto()).isEqualTo(List.of(post2));
     }
 
+    @Test
+    void whenFindByStatusThenFindOnlySpecifiedStatus() {
+        Map<User, Car> preconditions = ensurePreconditions();
+        Post post1 = new Post();
+        post1.setCreated(LocalDateTime.now());
+        post1.setDescription("test");
+        post1.setUser(preconditions.keySet().stream().findFirst().orElseThrow());
+        post1.setCar(preconditions.values().stream().findFirst().orElseThrow());
+        post1.setStatus(true);
+        Post post2 = new Post();
+        post2.setCreated(LocalDateTime.now().minusDays(1));
+        post2.setDescription("test2");
+        post2.setUser(preconditions.keySet().stream().findFirst().orElseThrow());
+        post2.setCar(preconditions.values().stream().findFirst().orElseThrow());
+        PostRepository postRepository = new PostRepositoryImpl(new CrudRepositoryImpl(sf));
+        postRepository.create(post1);
+        postRepository.create(post2);
+        assertThat(postRepository.findByStatus(true)).isEqualTo(List.of(post1));
+        assertThat(postRepository.findByStatus(false)).isEqualTo(List.of(post2));
+    }
+
     private Map<User, Car> ensurePreconditions() {
         User user = new User();
         user.setLogin("test" + new Random().nextInt());

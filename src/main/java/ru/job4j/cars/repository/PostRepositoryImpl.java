@@ -17,6 +17,7 @@ public class PostRepositoryImpl implements PostRepository {
     private static final String FROM_POST_WHERE_CREATED_CURRENT_DATE = "from Post where created >= :localDateTime";
     private static final String FROM_POST_WHERE_CAR_NAME = "from Post where car = (from Car where name= :model)";
     private static final String FROM_POST_WITH_PHOTO = "from Post where photo is not null";
+    private static final String FIND_BY_STATUS = "from Post where status = :status";
     private CrudRepository crudRepository;
 
     @Override
@@ -61,5 +62,10 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public List<Post> findPostsWithPhoto() {
         return crudRepository.query(FROM_POST_WITH_PHOTO, Post.class);
+    }
+
+    @Override
+    public List<Post> findByStatus(Boolean status) {
+        return crudRepository.query(FIND_BY_STATUS, Post.class, Map.of("status", status));
     }
 }
