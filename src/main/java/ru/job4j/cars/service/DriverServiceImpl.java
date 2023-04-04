@@ -15,7 +15,10 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public Driver create(Driver driver) {
-        return driverRepository.create(driver);
+        if (driverRepository.create(driver).getId() == 0) {
+            throw new IllegalStateException("При сохранении данных произошла ошибка");
+        }
+        return driver;
     }
 
     @Override

@@ -15,7 +15,10 @@ public class EngineServiceImpl implements EngineService {
 
     @Override
     public Engine create(Engine engine) {
-        return engineRepository.create(engine);
+        if (engineRepository.create(engine).getId() == 0) {
+            throw new IllegalStateException("При сохранении данных произошла ошибка");
+        }
+        return engine;
     }
 
     @Override

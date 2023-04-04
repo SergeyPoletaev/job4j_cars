@@ -15,7 +15,10 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car create(Car car) {
-        return carRepository.create(car);
+        if (carRepository.create(car).getId() == 0) {
+            throw new IllegalStateException("При сохранении данных произошла ошибка");
+        }
+        return car;
     }
 
     @Override
