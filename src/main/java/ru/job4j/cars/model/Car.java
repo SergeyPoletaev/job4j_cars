@@ -1,7 +1,6 @@
 package ru.job4j.cars.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -10,8 +9,11 @@ import java.util.Set;
 
 @Getter
 @Setter
+@Builder
 @Entity
 @Table(name = "car")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +27,7 @@ public class Car {
             joinColumns = {@JoinColumn(name = "car_id")},
             inverseJoinColumns = {@JoinColumn(name = "driver_id")}
     )
+    @Builder.Default
     private Set<Driver> owners = new HashSet<>();
     @ManyToOne
     @JoinColumn(name = "driver_id")

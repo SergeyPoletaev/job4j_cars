@@ -1,15 +1,17 @@
 package ru.job4j.cars.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Getter
 @Setter
+@Builder
 @Entity
 @Table(name = "engine")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Engine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
