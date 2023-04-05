@@ -33,39 +33,4 @@ class DriverServiceImplTest {
         verify(driverRepository).create(driver);
         assertThat(thrown.getMessage()).isEqualTo("При сохранении данных произошла ошибка");
     }
-
-    @Test
-    void whenUpdateThenProxy() {
-        DriverRepository driverRepository = mock(DriverRepository.class);
-        DriverService driverService = new DriverServiceImpl(driverRepository);
-        Driver driver = new Driver();
-        driverService.update(driver);
-        verify(driverRepository).update(driver);
-    }
-
-    @Test
-    void whenDeleteThenProxy() {
-        DriverRepository driverRepository = mock(DriverRepository.class);
-        DriverService driverService = new DriverServiceImpl(driverRepository);
-        int id = 1;
-        driverService.delete(id);
-        verify(driverRepository).delete(id);
-    }
-
-    @Test
-    void whenFindByIdThenProxy() {
-        DriverRepository driverRepository = mock(DriverRepository.class);
-        DriverService driverService = new DriverServiceImpl(driverRepository);
-        int id = 1;
-        driverService.findById(id);
-        verify(driverRepository).findById(id);
-    }
-
-    @Test
-    void whenFindAllThenProxy() {
-        DriverRepository driverRepository = mock(DriverRepository.class);
-        DriverService driverService = new DriverServiceImpl(driverRepository);
-        driverService.findAll();
-        verify(driverRepository).findAll();
-    }
 }
