@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.service.PostService;
@@ -75,8 +76,12 @@ public class PostController {
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute Post post, RedirectAttributes att, HttpSession httpSession) {
+    public String update(@ModelAttribute Post post,
+                         RedirectAttributes att,
+                         HttpSession httpSession,
+                         @RequestParam("attachment") MultipartFile file) {
         try {
+            post.setPhoto(file.getBytes());
             postService.update(post, httpSession);
             return "redirect:/post/posts";
         } catch (IllegalArgumentException ex) {

@@ -3,6 +3,7 @@ package ru.job4j.cars.controller;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.service.PostService;
@@ -178,7 +179,8 @@ class PostControllerTest {
         RedirectAttributes attr = mock(RedirectAttributes.class);
         HttpSession httpSession = mock(HttpSession.class);
         Post post = new Post();
-        String page = postController.update(post, attr, httpSession);
+        MultipartFile file = mock(MultipartFile.class);
+        String page = postController.update(post, attr, httpSession, file);
         verify(postService).update(post, httpSession);
         assertThat(page).isEqualTo("redirect:/post/posts");
     }
@@ -192,7 +194,8 @@ class PostControllerTest {
         Post post = new Post();
         Exception ex = new IllegalArgumentException();
         doThrow(ex).when(postService).update(post, httpSession);
-        String page = postController.update(post, attr, httpSession);
+        MultipartFile file = mock(MultipartFile.class);
+        String page = postController.update(post, attr, httpSession, file);
         verify(postService).update(post, httpSession);
         verify(attr).addFlashAttribute("error_message", ex.getMessage());
         assertThat(page).isEqualTo("redirect:/error/fail");
@@ -208,7 +211,8 @@ class PostControllerTest {
         doAnswer((invocation) -> {
             throw new Exception();
         }).when(postService).update(post, httpSession);
-        String page = postController.update(post, attr, httpSession);
+        MultipartFile file = mock(MultipartFile.class);
+        String page = postController.update(post, attr, httpSession, file);
         verify(postService).update(post, httpSession);
         verify(attr).addFlashAttribute("error_message", "При обновлении данных произошла ошибка");
         assertThat(page).isEqualTo("redirect:/error/fail");

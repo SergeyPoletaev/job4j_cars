@@ -43,7 +43,7 @@
             <p class="card-text" th:text="${post.id}"></p>
         </div>
         <div class="card-body">
-            <form th:action="@{/post/update}" method="POST">
+            <form th:action="@{/post/update}" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="id" th:field="${post.id}"/>
                 <input type="hidden" name="id" th:field="${post.user.id}"/>
                 <input type="hidden" name="id" th:field="${post.car.id}"/>
@@ -59,6 +59,8 @@
                            th:field="${post.status}">
                     <label class="form-check-label" for="visible">Продано</label>
                 </div>
+                <label for="photo">Добавьте фото</label>
+                <input type="file" class="form-control" name="attachment" id="photo">
                 <button type="submit" class="btn btn-success">Сохранить</button>
                 <a class="btn btn-danger" th:href="@{/post/posts}" role="button">Отменить</a>
             </form>
