@@ -7,9 +7,11 @@ import ru.job4j.cars.repository.PostRepository;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.TimeZone;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -118,16 +120,20 @@ class PostServiceImplTest {
         CarService carService = mock(CarService.class);
         EngineService engineService = mock(EngineService.class);
         PostService postService = new PostServiceImpl(postRepository, driverService, carService, engineService);
+        String userTz = "Europe/Moscow";
         User user = new User();
-        user.setTimezone("UTC");
+        user.setTimezone(userTz);
+        LocalDateTime ldt = LocalDateTime.of(2023, 1, 15, 1, 15);
         when(postRepository.findAll()).thenReturn(List.of(
                 Post.builder()
-                        .created(LocalDateTime.of(2023, 1, 15, 1, 15))
+                        .created(ldt)
                         .build())
         );
         List<Post> rsl = postService.findAll(user);
         verify(postRepository).findAll();
-        assertThat(rsl.get(0).getCreated()).isEqualTo(LocalDateTime.of(2023, 1, 14, 22, 15));
+        LocalDateTime utc = ldt.minusSeconds(TimeZone.getTimeZone(ZoneId.systemDefault()).getRawOffset() / 1000);
+        LocalDateTime exp = utc.plusSeconds(TimeZone.getTimeZone(userTz).getRawOffset() / 1000);
+        assertThat(rsl.get(0).getCreated()).isEqualTo(exp);
     }
 
     @Test
@@ -156,5 +162,9 @@ class PostServiceImplTest {
         EngineService engineService = mock(EngineService.class);
         new PostServiceImpl(postRepository, driverService, carService, engineService).findByStatus(true);
         verify(postRepository).findByStatus(true);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(TimeZone.getTimeZone(ZoneId.systemDefault()).getRawOffset());
     }
 }
