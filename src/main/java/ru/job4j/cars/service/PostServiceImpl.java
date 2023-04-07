@@ -38,16 +38,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void update(Post post, HttpSession httpSession) {
-        if (!post.getUser().equals(httpSession.getAttribute("user"))) {
-            throw new IllegalArgumentException("Редактировать объявление может только пользователь, который его создал");
-        }
+    public void update(Post post) {
         postRepository.update(post);
     }
 
     @Override
-    public Post findById(int id) {
-        return postRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Объявление больше не доступно"));
+    public Optional<Post> findById(int id) {
+        return postRepository.findById(id);
     }
 
     @Override

@@ -6,12 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.job4j.cars.model.Post;
+import ru.job4j.cars.model.User;
 import ru.job4j.cars.service.PostService;
 import ru.job4j.cars.util.HttpHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -139,7 +140,7 @@ class PostControllerTest {
         RedirectAttributes attr = mock(RedirectAttributes.class);
         int postId = 1;
         Post post = new Post();
-        when(postService.findById(postId)).thenReturn(post);
+        when(postService.findById(postId)).thenReturn(Optional.of(post));
         String page = postController.select(postId, attr);
         verify(attr).addFlashAttribute("post", post);
         assertThat(page).isEqualTo("redirect:/post/poster");
@@ -151,10 +152,8 @@ class PostControllerTest {
         PostController postController = new PostController(postService);
         RedirectAttributes attr = mock(RedirectAttributes.class);
         int postId = 1;
-        Exception ex = new NoSuchElementException();
-        when(postService.findById(postId)).thenThrow(ex);
         String page = postController.select(postId, attr);
-        verify(attr).addFlashAttribute("error_message", ex.getMessage());
+        verify(attr).addFlashAttribute("error_message", "Объявление больше не доступно");
         assertThat(page).isEqualTo("redirect:/error/fail");
     }
 
@@ -179,25 +178,31 @@ class PostControllerTest {
         RedirectAttributes attr = mock(RedirectAttributes.class);
         HttpSession httpSession = mock(HttpSession.class);
         Post post = new Post();
+        User user = new User();
+        post.setUser(user);
+        when(httpSession.getAttribute("user")).thenReturn(user);
         MultipartFile file = mock(MultipartFile.class);
         String page = postController.update(post, attr, httpSession, file);
-        verify(postService).update(post, httpSession);
+        verify(postService).update(post);
         assertThat(page).isEqualTo("redirect:/post/posts");
     }
 
     @Test
-    void whenUpdateThenIllegalArgumentExceptionHandle() {
+    void whenUpdateOtherUserThenRedirectFailPage() {
         PostService postService = mock(PostService.class);
         PostController postController = new PostController(postService);
         RedirectAttributes attr = mock(RedirectAttributes.class);
         HttpSession httpSession = mock(HttpSession.class);
         Post post = new Post();
-        Exception ex = new IllegalArgumentException();
-        doThrow(ex).when(postService).update(post, httpSession);
+        User user = new User();
+        user.setId(1);
+        post.setUser(user);
+        User user2 = new User();
+        when(httpSession.getAttribute("user")).thenReturn(user2);
         MultipartFile file = mock(MultipartFile.class);
         String page = postController.update(post, attr, httpSession, file);
-        verify(postService).update(post, httpSession);
-        verify(attr).addFlashAttribute("error_message", ex.getMessage());
+        verify(attr).addFlashAttribute("error_message",
+                "Редактировать объявление может только пользователь, который его создал");
         assertThat(page).isEqualTo("redirect:/error/fail");
     }
 
@@ -208,12 +213,15 @@ class PostControllerTest {
         RedirectAttributes attr = mock(RedirectAttributes.class);
         HttpSession httpSession = mock(HttpSession.class);
         Post post = new Post();
+        User user = new User();
+        post.setUser(user);
+        when(httpSession.getAttribute("user")).thenReturn(user);
         doAnswer((invocation) -> {
             throw new Exception();
-        }).when(postService).update(post, httpSession);
+        }).when(postService).update(post);
         MultipartFile file = mock(MultipartFile.class);
         String page = postController.update(post, attr, httpSession, file);
-        verify(postService).update(post, httpSession);
+        verify(postService).update(post);
         verify(attr).addFlashAttribute("error_message", "При обновлении данных произошла ошибка");
         assertThat(page).isEqualTo("redirect:/error/fail");
     }
@@ -227,30 +235,30 @@ class PostControllerTest {
         HttpSession httpSession = mock(HttpSession.class);
         int id = 1;
         String page;
+        Post post = new Post();
+        when(postService.findById(id)).thenReturn(Optional.of(post));
         try (MockedStatic<HttpHelper> httpHelper = mockStatic(HttpHelper.class)) {
             page = postController.update(id, model, httpSession, attr);
             httpHelper.verify(() -> HttpHelper.addUserToModel(model, httpSession));
         }
-        verify(model).addAttribute("post", postService.findById(id));
+        verify(model).addAttribute("post", Optional.of(post).get());
         assertThat(page).isEqualTo("/post/update");
     }
 
     @Test
-    void whenUpdateThenExceptionHandleAndReturnErrorPage() {
+    void whenUpdateThenReturnErrorPage() {
         PostService postService = mock(PostService.class);
         PostController postController = new PostController(postService);
         Model model = mock(Model.class);
         RedirectAttributes attr = mock(RedirectAttributes.class);
         HttpSession httpSession = mock(HttpSession.class);
-        Exception ex = new NoSuchElementException();
         int id = 1;
-        doThrow(ex).when(postService).findById(id);
         String page;
         try (MockedStatic<HttpHelper> httpHelper = mockStatic(HttpHelper.class)) {
             page = postController.update(id, model, httpSession, attr);
             httpHelper.verify(() -> HttpHelper.addUserToModel(model, httpSession));
         }
-        verify(attr).addFlashAttribute("error_message", ex.getMessage());
+        verify(attr).addFlashAttribute("error_message", "Объявление больше не доступно");
         assertThat(page).isEqualTo("redirect:/error/fail");
     }
 
@@ -260,21 +268,21 @@ class PostControllerTest {
         PostController postController = new PostController(postService);
         RedirectAttributes attr = mock(RedirectAttributes.class);
         int id = 1;
+        Post post = new Post();
+        when(postService.findById(id)).thenReturn(Optional.of(post));
         String page = postController.getPost(id, attr);
-        verify(attr).addFlashAttribute("post", postService.findById(id));
+        verify(attr).addFlashAttribute("post", Optional.of(post).get());
         assertThat(page).isEqualTo("redirect:/post/photo/resource");
     }
 
     @Test
-    void whenGetPostThenNoSouchElementExceptionHandle() {
+    void whenGetPostThenNoSouchElementAndReturnFailPage() {
         PostService postService = mock(PostService.class);
         PostController postController = new PostController(postService);
         RedirectAttributes attr = mock(RedirectAttributes.class);
         int id = 1;
-        Exception ex = new NoSuchElementException();
-        doThrow(ex).when(postService).findById(id);
         String page = postController.getPost(id, attr);
-        verify(attr).addFlashAttribute("error_message", ex.getMessage());
+        verify(attr).addFlashAttribute("error_message", "Объявление больше не доступно");
         assertThat(page).isEqualTo("redirect:/error/fail");
     }
 }

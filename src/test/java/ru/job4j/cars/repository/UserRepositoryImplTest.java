@@ -12,6 +12,7 @@ import ru.job4j.cars.model.User;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -52,6 +53,20 @@ class UserRepositoryImplTest {
         userRepository.create(user);
         assertThat(userRepository.findById(user.getId()).orElseThrow().getLogin())
                 .isEqualTo("testUser");
+    }
+
+    @Test
+    void whenCreateSomeUserNonUniqueLoginThenReturnOptEmpty() {
+        UserRepository userRepository = new UserRepositoryImpl(new CrudRepositoryImpl(sf));
+        User user = new User();
+        user.setLogin("testUser");
+        user.setPassword("123");
+        User user2 = new User();
+        user2.setLogin("testUser");
+        user2.setPassword("123");
+        userRepository.create(user);
+        Optional<User> rsl = userRepository.create(user2);
+        assertThat(rsl).isEmpty();
     }
 
     @Test

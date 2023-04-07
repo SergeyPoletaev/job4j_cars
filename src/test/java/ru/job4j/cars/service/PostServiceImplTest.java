@@ -5,11 +5,9 @@ import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.repository.PostRepository;
 
-import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.TimeZone;
 
@@ -56,32 +54,11 @@ class PostServiceImplTest {
         DriverService driverService = mock(DriverService.class);
         CarService carService = mock(CarService.class);
         EngineService engineService = mock(EngineService.class);
-        HttpSession httpSession = mock(HttpSession.class);
         Post post = new Post();
         User postUser = new User();
         post.setUser(postUser);
-        User sessionUser = new User();
-        when(httpSession.getAttribute("user")).thenReturn(sessionUser);
-        new PostServiceImpl(postRepository, driverService, carService, engineService).update(post, httpSession);
+        new PostServiceImpl(postRepository, driverService, carService, engineService).update(post);
         verify(postRepository).update(post);
-    }
-
-    @Test
-    void whenUpdateThenEx() {
-        PostRepository postRepository = mock(PostRepository.class);
-        DriverService driverService = mock(DriverService.class);
-        CarService carService = mock(CarService.class);
-        EngineService engineService = mock(EngineService.class);
-        HttpSession httpSession = mock(HttpSession.class);
-        Post post = new Post();
-        User postUser = new User();
-        postUser.setId(1);
-        post.setUser(postUser);
-        User sessionUser = new User();
-        when(httpSession.getAttribute("user")).thenReturn(sessionUser);
-        Throwable thrown = assertThrows(IllegalArgumentException.class,
-                () -> new PostServiceImpl(postRepository, driverService, carService, engineService).update(post, httpSession));
-        assertThat(thrown.getMessage()).isEqualTo("Редактировать объявление может только пользователь, который его создал");
     }
 
     @Test
@@ -93,24 +70,9 @@ class PostServiceImplTest {
         Post post = new Post();
         post.setId(1);
         when(postRepository.findById(post.getId())).thenReturn(Optional.of(post));
-        Post rslPost = new PostServiceImpl(postRepository, driverService, carService, engineService).findById(post.getId());
+        Optional<Post> rslPost = new PostServiceImpl(postRepository, driverService, carService, engineService).findById(post.getId());
         verify(postRepository).findById(post.getId());
-        assertThat(rslPost).isEqualTo(post);
-    }
-
-    @Test
-    void whenFindByIdThenEx() {
-        PostRepository postRepository = mock(PostRepository.class);
-        DriverService driverService = mock(DriverService.class);
-        CarService carService = mock(CarService.class);
-        EngineService engineService = mock(EngineService.class);
-        Post post = new Post();
-        post.setId(1);
-        when(postRepository.findById(post.getId())).thenReturn(Optional.empty());
-        Throwable thrown = assertThrows(NoSuchElementException.class,
-                () -> new PostServiceImpl(postRepository, driverService, carService, engineService).findById(post.getId()));
-        verify(postRepository).findById(post.getId());
-        assertThat(thrown.getMessage()).isEqualTo("Объявление больше не доступно");
+        assertThat(rslPost).isEqualTo(Optional.of(post));
     }
 
     @Test
@@ -162,9 +124,5 @@ class PostServiceImplTest {
         EngineService engineService = mock(EngineService.class);
         new PostServiceImpl(postRepository, driverService, carService, engineService).findByStatus(true);
         verify(postRepository).findByStatus(true);
-    }
-
-    public static void main(String[] args) {
-        System.out.println(TimeZone.getTimeZone(ZoneId.systemDefault()).getRawOffset());
     }
 }

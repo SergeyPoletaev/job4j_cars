@@ -92,7 +92,7 @@ class UserControllerTest {
         when(userService.findByLogin(user.getLogin())).thenReturn(Optional.empty());
         User userDb = new User();
         userDb.setId(1);
-        when(userService.create(user)).thenReturn(userDb);
+        when(userService.create(user)).thenReturn(Optional.of(userDb));
         RedirectAttributes attr = mock(RedirectAttributes.class);
         Model model = mock(Model.class);
         String page = userController.registration(user, attr, model);
@@ -105,13 +105,13 @@ class UserControllerTest {
         UserController userController = new UserController(userService);
         User user = new User();
         when(userService.findByLogin(user.getLogin())).thenReturn(Optional.empty());
-        when(userService.create(user)).thenReturn(user);
+        when(userService.create(user)).thenReturn(Optional.of(user));
         RedirectAttributes attr = mock(RedirectAttributes.class);
         Model model = mock(Model.class);
         String page = userController.registration(user, attr, model);
         verify(model).addAttribute("error_message",
                 "При регистрации пользователя возникла ошибка, пользователь не зарегистрирован");
-        assertThat(page).isEqualTo("/shared/fail");
+        assertThat(page).isEqualTo("redirect:/error/fail");
     }
 
     @Test
@@ -119,7 +119,7 @@ class UserControllerTest {
         UserService userService = mock(UserService.class);
         UserController userController = new UserController(userService);
         User user = new User();
-        when(userService.findByLogin(user.getLogin())).thenReturn(Optional.of(user));
+        when(userService.create(user)).thenReturn(Optional.empty());
         RedirectAttributes attr = mock(RedirectAttributes.class);
         Model model = mock(Model.class);
         String page = userController.registration(user, attr, model);

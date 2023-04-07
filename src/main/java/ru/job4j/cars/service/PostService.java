@@ -6,14 +6,15 @@ import ru.job4j.cars.model.User;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Optional;
 
 public interface PostService {
 
     Post create(Post post);
 
-    void update(Post post, HttpSession httpSession);
+    void update(Post post);
 
-    Post findById(int id);
+    Optional<Post> findById(int id);
 
     List<Post> findAll(User user);
 

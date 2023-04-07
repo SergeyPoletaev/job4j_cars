@@ -48,13 +48,17 @@ public class UserController {
 
     @PostMapping("/registration")
     public String registration(@ModelAttribute User user, RedirectAttributes redirectAttributes, Model model) {
+        Optional<User> userOpt = userService.create(user);
+        if (userOpt.isPresent() && userOpt.get().getId() != 0) {
+            return "redirect:/user/login";
+        }
+        if (userOpt.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "Пользователь с таким логином уже существует!");
+            return "redirect:/user/add";
+        }
         model.addAttribute("error_message",
                 "При регистрации пользователя возникла ошибка, пользователь не зарегистрирован");
-        if (userService.findByLogin(user.getLogin()).isEmpty()) {
-            return userService.create(user).getId() != 0 ? "redirect:/user/login" : "/shared/fail";
-        }
-        redirectAttributes.addFlashAttribute("message", "Пользователь с таким логином уже существует!");
-        return "redirect:/user/add";
+        return "redirect:/error/fail";
     }
 
     @GetMapping("/logout")

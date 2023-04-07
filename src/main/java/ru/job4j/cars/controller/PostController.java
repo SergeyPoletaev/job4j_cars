@@ -17,8 +17,8 @@ import ru.job4j.cars.util.HttpHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -60,13 +60,13 @@ public class PostController {
 
     @PostMapping("/select")
     public String select(@RequestParam int postId, RedirectAttributes attr) {
-        try {
-            attr.addFlashAttribute("post", postService.findById(postId));
+        Optional<Post> postOpt = postService.findById(postId);
+        if (postOpt.isPresent()) {
+            attr.addFlashAttribute("post", postOpt.get());
             return "redirect:/post/poster";
-        } catch (NoSuchElementException ex) {
-            attr.addFlashAttribute("error_message", ex.getMessage());
-            return "redirect:/error/fail";
         }
+        attr.addFlashAttribute("error_message", "Объявление больше не доступно");
+        return "redirect:/error/fail";
     }
 
     @GetMapping("/poster")
@@ -81,12 +81,14 @@ public class PostController {
                          HttpSession httpSession,
                          @RequestParam("attachment") MultipartFile file) {
         try {
+            if (!post.getUser().equals(httpSession.getAttribute("user"))) {
+                att.addFlashAttribute("error_message",
+                        "Редактировать объявление может только пользователь, который его создал");
+                return "redirect:/error/fail";
+            }
             post.setPhoto(file.getBytes());
-            postService.update(post, httpSession);
+            postService.update(post);
             return "redirect:/post/posts";
-        } catch (IllegalArgumentException ex) {
-            att.addFlashAttribute("error_message", ex.getMessage());
-            return "redirect:/error/fail";
         } catch (Exception ex) {
             att.addFlashAttribute("error_message", "При обновлении данных произошла ошибка");
             return "redirect:/error/fail";
@@ -96,24 +98,24 @@ public class PostController {
     @GetMapping("/update/{id}")
     public String update(@PathVariable int id, Model model, HttpSession httpSession, RedirectAttributes attr) {
         HttpHelper.addUserToModel(model, httpSession);
-        try {
-            model.addAttribute("post", postService.findById(id));
+        Optional<Post> postOpt = postService.findById(id);
+        if (postOpt.isPresent()) {
+            model.addAttribute("post", postOpt.get());
             return "/post/update";
-        } catch (NoSuchElementException ex) {
-            attr.addFlashAttribute("error_message", ex.getMessage());
-            return "redirect:/error/fail";
         }
+        attr.addFlashAttribute("error_message", "Объявление больше не доступно");
+        return "redirect:/error/fail";
     }
 
     @GetMapping("/photo/{postId}")
     public String getPost(@PathVariable("postId") Integer postId, RedirectAttributes attr) {
-        try {
-            attr.addFlashAttribute("post", postService.findById(postId));
+        Optional<Post> postOpt = postService.findById(postId);
+        if (postOpt.isPresent()) {
+            attr.addFlashAttribute("post", postOpt.get());
             return "redirect:/post/photo/resource";
-        } catch (NoSuchElementException ex) {
-            attr.addFlashAttribute("error_message", ex.getMessage());
-            return "redirect:/error/fail";
         }
+        attr.addFlashAttribute("error_message", "Объявление больше не доступно");
+        return "redirect:/error/fail";
     }
 
     @GetMapping("/photo/resource")

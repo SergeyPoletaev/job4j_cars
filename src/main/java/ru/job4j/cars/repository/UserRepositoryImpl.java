@@ -24,9 +24,13 @@ public class UserRepositoryImpl implements UserRepository {
      * @return пользователь с id.
      */
     @Override
-    public User create(User user) {
-        crudRepository.run(session -> session.save(user));
-        return user;
+    public Optional<User> create(User user) {
+        try {
+            crudRepository.run(session -> session.save(user));
+            return Optional.of(user);
+        } catch (IllegalStateException ex) {
+            return Optional.empty();
+        }
     }
 
     /**
