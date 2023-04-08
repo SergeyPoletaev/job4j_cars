@@ -1,6 +1,7 @@
 package ru.job4j.cars.repository;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.User;
 
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @AllArgsConstructor
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -29,8 +31,9 @@ public class UserRepositoryImpl implements UserRepository {
             crudRepository.run(session -> session.save(user));
             return Optional.of(user);
         } catch (IllegalStateException ex) {
-            return Optional.empty();
+            log.error("При регистрации пользователь ввел не уникальный логин");
         }
+        return Optional.empty();
     }
 
     /**
